@@ -38,6 +38,7 @@ OUTPUT
 7. ~~What about empty line? Keep this case in mind~~ All is fine using current approach.
 8. Dependency Injection can be added but don't see the need of doing this at current stage without info about further plans of project.
 9. Process can be slightly accelerated with use of multithreading. After reading each line processing of each line can be done in separate thread. In this case method and collection of results have to be threadsafe.
+10. Was no info about the result rounding up.
 
 
 ## Instructions to use

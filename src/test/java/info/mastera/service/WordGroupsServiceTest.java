@@ -12,7 +12,8 @@ class WordGroupsServiceTest {
 
     @Test
     public void addFirstInfoTest() {
-        wordGroupsService = new WordGroupsService();
+        wordGroupsService = WordGroupsService.getInstance();
+        wordGroupsService.getGroups().clear();
         Assertions.assertNotNull(wordGroupsService.getGroups());
         Assertions.assertTrue(wordGroupsService.getGroups().isEmpty());
 
@@ -27,7 +28,7 @@ class WordGroupsServiceTest {
 
     @Test
     public void addFirstAnotherKeyValueTest() {
-        wordGroupsService = new WordGroupsService();
+        wordGroupsService = WordGroupsService.getInstance();
         WordInfo wordInfo = new WordInfo();
         wordGroupsService.add(wordInfo);
 
@@ -42,7 +43,7 @@ class WordGroupsServiceTest {
 
     @Test
     public void addNextValueForKeyTest() {
-        wordGroupsService = new WordGroupsService();
+        wordGroupsService = WordGroupsService.getInstance();
         WordInfo wordInfo = new WordInfo();
         wordGroupsService.add(wordInfo);
 

@@ -2,15 +2,18 @@ package info.mastera.service;
 
 import info.mastera.model.WordInfo;
 
-public class WordService {
+public class WordProcessingThread implements Runnable {
 
     private final WordGroupsService wordGroupsService;
+    private final String source;
 
-    public WordService(WordGroupsService wordGroupsService) {
+    public WordProcessingThread(WordGroupsService wordGroupsService, String source) {
         this.wordGroupsService = wordGroupsService;
+        this.source = source;
     }
 
-    public void process(String source) {
+    @Override
+    public void run() {
         WordInfo wordInfo = null;
         for (int i = 0; i < source.length(); i++) {
             char currentChar = source.charAt(i);

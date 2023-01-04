@@ -3,11 +3,23 @@ package info.mastera.service;
 import info.mastera.model.WordGrouping;
 import info.mastera.model.WordInfo;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 public class WordGroupsService {
 
-    private final Map<WordGrouping, List<Integer>> groups = new HashMap<>();
+    private final static WordGroupsService instance = new WordGroupsService();
+
+    private final ConcurrentMap<WordGrouping, List<Integer>> groups = new ConcurrentHashMap<>();
+
+    private WordGroupsService() {
+    }
+
+    public static WordGroupsService getInstance() {
+        return instance;
+    }
 
     public void add(WordInfo wordInfo) {
         if (groups.containsKey(wordInfo.getWordGrouping())) {
@@ -17,7 +29,7 @@ public class WordGroupsService {
         }
     }
 
-    public Map<WordGrouping, List<Integer>> getGroups() {
+    public ConcurrentMap<WordGrouping, List<Integer>> getGroups() {
         return groups;
     }
 }

@@ -7,28 +7,37 @@ import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class FileService {
 
-    private final WordService wordService;
-
-    public FileService(WordService wordService) {
-        this.wordService = wordService;
-    }
-
     public void load(String filename) {
         Path filePath = Paths.get("./" + filename);
+        ExecutorService executorService = Executors.newWorkStealingPool();
+        var futures = new LinkedList<Future<?>>();
         try (BufferedReader reader = Files.newBufferedReader(filePath, StandardCharsets.UTF_8)) {
             String line;
             while ((line = reader.readLine()) != null) {
-                //this can be done in separate thread if project need this acceleration
-                wordService.process(line);
+                WordProcessingThread thread = new WordProcessingThread(WordGroupsService.getInstance(), line);
+                futures.add(executorService.submit(thread));
+            }
+            executorService.shutdown();
+            for (Future<?> future : futures) {
+                future.get();
             }
         } catch (NoSuchFileException e) {
             System.out.printf("No file %s found.%n", filename);
         } catch (IOException e) {
             System.out.println("File reading error.");
+        } catch (ExecutionException e) {
+            System.out.println("Execution exception.");
+        } catch (InterruptedException e) {
+            System.out.println("Process interrupted.");
         }
     }
 
